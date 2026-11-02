@@ -33,9 +33,8 @@ header{position:relative;overflow:hidden;display:grid;gap:18px;justify-items:cen
 header canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 header>*:not(canvas){position:relative}
 h1{font-family:var(--script);font-weight:700;margin:0;line-height:.95;display:grid;text-shadow:0 2px 12px rgba(0,0,0,.15)}
-h1 .n{font-size:clamp(4rem,18vw,6rem)}
-h1 .da{font-size:clamp(1.8rem,7vw,2.4rem)}
-h1 .nome{font-size:clamp(3.4rem,15vw,5rem)}
+h1 .n{font-size:clamp(3.4rem,15vw,5.2rem)}
+h1 .nome{font-size:clamp(3rem,13vw,4.6rem)}
 .info{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
 .info span{font-family:var(--display);font-style:italic;font-weight:600;font-size:1.6rem;background:#fff;color:#e0602a;border-radius:99px;padding:6px 28px;font-variant-numeric:tabular-nums}
 .local{font-family:var(--display);font-style:italic;font-weight:500;margin:0;max-width:30ch;line-height:1.4}
@@ -70,7 +69,7 @@ li .who{min-width:0;overflow-wrap:anywhere}
 <div class="wrap">
   <header>
     <canvas id="baloes" aria-hidden="true"></canvas>
-    <h1><span class="n">60</span><span class="da">anos da</span><span class="nome">Luzia</span></h1>
+    <h1><span class="n">60 anos</span><span class="nome">da Luzia</span></h1>
     <div class="info">
       <span>19/11</span>
       <span>21:00</span>
@@ -102,19 +101,34 @@ li .who{min-width:0;overflow-wrap:anywhere}
     const w = c.clientWidth, h = c.clientHeight, r = devicePixelRatio||1;
     c.width = w*r; c.height = h*r; x.setTransform(r,0,0,r,0,0); x.clearRect(0,0,w,h);
     const s = Math.min(1, w/520);
-    const balls = [[.08,.06,"#ff8fb8"],[.24,.02,"#ff5f9b"],[.78,.0,"#ffd9c2"],[.93,.08,"#ffc4a3"],[.66,.1,"#ffe6d6"]];
-    for (const [fx,fy,col] of balls){
-      const bx = fx*w, by = fy*h+30*s, rx = 34*s, ry = 42*s;
-      x.strokeStyle="rgba(255,255,255,.5)"; x.lineWidth=1;
-      x.beginPath(); x.moveTo(bx,by+ry); x.quadraticCurveTo(bx+10*s,by+ry+40*s,bx-4*s,by+ry+90*s); x.stroke();
-      const g = x.createRadialGradient(bx-rx*.35,by-ry*.4,2,bx,by,ry*1.1);
-      g.addColorStop(0,"#fff"); g.addColorStop(.25,col); g.addColorStop(1,col);
-      x.globalAlpha=.85; x.fillStyle=g; x.beginPath(); x.ellipse(bx,by,rx,ry,0,0,Math.PI*2); x.fill(); x.globalAlpha=1;
+    // Dois cachos de balões (esquerda rosa, direita pêssego) nas laterais, deixando o centro livre para o texto.
+    // [x a partir da borda em px, y em fração da altura, tamanho, cor, inclinação]
+    const rosa = ["#ff8fb8","#ff5f9b","#ffb3cf","#f2558f","#ffc9dc"];
+    const pessego = ["#ffd9c2","#ffc4a3","#ffe9dc","#ffb08a","#fff1e8"];
+    const cacho = [[-6,.02,1.15,0,-.12],[46,-.03,1,1,.06],[18,.16,.95,2,-.05],[78,.11,.8,3,.15],[-14,.3,.85,4,-.2],[52,.27,.7,0,.1],[100,.0,.65,2,.2]];
+    const balls = [];
+    for (const [px,fy,k,ci,rot] of cacho){
+      balls.push([px*s+30*s, fy, k, rosa[ci], rot]);
+      balls.push([w-(px*s+30*s), fy+.03, k*.95, pessego[ci], -rot]);
+    }
+    balls.push([w*.5-150*s, .78, .55, "#ff9fc3", -.15], [w*.5+150*s, .82, .5, "#ffd2bb", .15]);
+    balls.sort((a,b)=>a[2]-b[2]);
+    for (const [bx,fy,k,col,rot] of balls){
+      const by = fy*h+46*s, rx = 34*s*k, ry = 42*s*k;
+      x.strokeStyle="rgba(255,255,255,.55)"; x.lineWidth=1;
+      x.beginPath(); x.moveTo(bx,by+ry); x.bezierCurveTo(bx+12*s,by+ry+40*s,bx-12*s,by+ry+70*s,bx+4*s,by+ry+120*s*k); x.stroke();
+      x.save(); x.translate(bx,by); x.rotate(rot);
+      const g = x.createRadialGradient(-rx*.35,-ry*.4,1,0,0,ry*1.15);
+      g.addColorStop(0,"#fff"); g.addColorStop(.22,col); g.addColorStop(1,col);
+      x.globalAlpha=.9; x.fillStyle=g; x.beginPath(); x.ellipse(0,0,rx,ry,0,0,Math.PI*2); x.fill();
+      x.beginPath(); x.moveTo(-4*s*k,ry); x.lineTo(4*s*k,ry); x.lineTo(0,ry+6*s*k); x.closePath(); x.fill();
+      x.fillStyle="rgba(255,255,255,.55)"; x.beginPath(); x.ellipse(-rx*.4,-ry*.45,rx*.16,ry*.24,-.5,0,Math.PI*2); x.fill();
+      x.globalAlpha=1; x.restore();
     }
     let seed = 7; const rnd = () => (seed = (seed*9301+49297)%233280)/233280;
-    for (let i=0;i<40;i++){
-      x.fillStyle = rnd()>.5 ? "rgba(212,170,110,.9)" : "rgba(255,255,255,.8)";
-      x.save(); x.translate(rnd()*w, rnd()*h*.45); x.rotate(rnd()*3); x.fillRect(-3,-1.2,6,2.4); x.restore();
+    for (let i=0;i<90;i++){
+      x.fillStyle = rnd()>.45 ? "rgba(214,176,112,.95)" : "rgba(255,255,255,.85)";
+      x.save(); x.translate(rnd()*w, rnd()*h); x.rotate(rnd()*3); x.fillRect(-3,-1.2,6,2.4); x.restore();
     }
   }
   draw(); addEventListener("resize", draw);
