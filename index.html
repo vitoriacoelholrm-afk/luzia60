@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:title" content="60 anos da Luzia">
+<meta property="og:description" content="19/11 às 21h · Casa Amarela, Contagem. Confirme sua presença!">
+<title>60 anos da Luzia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: convite em degradê rosa→laranja no topo, formulário em cartão, lista de confirmados abaixo */
+:root{
+  --bg:#fff6f1; --surface:#ffffff; --fg:#4a2233; --muted:#7d5a66;
+  --accent:#f0712c; --accent-2:#e5408a; --line:#f3dcd8; --ok:#1f8a5b; --no:#b23a5c;
+  --hero-a:#d9307a; --hero-b:#f0712c;
+  --display:"Lora",Georgia,serif; --script:"Dancing Script",cursive;
+  --body:"DM Sans",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1f1218; --surface:#2b1a22; --fg:#fbecef; --muted:#c9a9b4;
+  --accent:#ff8a4c; --accent-2:#ff6aa6; --line:#45293a; --ok:#4fd197; --no:#ff8aa0;
+  --hero-a:#a8235d; --hero-b:#c4561d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1f1218; --surface:#2b1a22; --fg:#fbecef; --muted:#c9a9b4;
+  --accent:#ff8a4c; --accent-2:#ff6aa6; --line:#45293a; --ok:#4fd197; --no:#ff8aa0;
+  --hero-a:#a8235d; --hero-b:#c4561d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 56px}
+.wrap{max-width:640px;margin:0 auto;display:grid;gap:28px}
+header{position:relative;overflow:hidden;display:grid;gap:18px;justify-items:center;text-align:center;color:#fff;border-radius:22px;padding:44px 20px 34px;background:linear-gradient(170deg,var(--hero-a),var(--hero-b))}
+header canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+header>*:not(canvas){position:relative}
+h1{font-family:var(--script);font-weight:700;margin:0;line-height:.95;display:grid;text-shadow:0 2px 12px rgba(0,0,0,.15)}
+h1 .n{font-size:clamp(4rem,18vw,6rem)}
+h1 .da{font-size:clamp(1.8rem,7vw,2.4rem)}
+h1 .nome{font-size:clamp(3.4rem,15vw,5rem)}
+.info{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.info span{font-family:var(--display);font-style:italic;font-weight:600;font-size:1.6rem;background:#fff;color:#e0602a;border-radius:99px;padding:6px 28px;font-variant-numeric:tabular-nums}
+.local{font-family:var(--display);font-style:italic;font-weight:500;margin:0;max-width:30ch;line-height:1.4}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:18px}
+h2{font-family:var(--script);font-weight:700;font-size:2rem;margin:0;color:var(--accent-2)}
+label{font-weight:700;font-size:14px;display:block;margin-bottom:6px}
+input,select,textarea{width:100%;font:inherit;color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--accent-2);outline-offset:1px}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice input{position:absolute;opacity:0;width:1px}
+.choice label{margin:0;cursor:pointer;text-align:center;padding:14px;border:1.5px solid var(--line);border-radius:12px;font-size:16px}
+.choice input:checked+label{border-color:var(--accent);background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff}
+.choice input:focus-visible+label{outline:3px solid var(--accent-2)}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 18px;background:var(--accent);color:#fff;cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+.msg{font-weight:500;min-height:1.4em;margin:0}
+.stats{display:flex;gap:24px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.stats div{display:grid}
+.stats b{font-family:var(--display);color:var(--accent);font-size:2rem;line-height:1}
+.stats small{color:var(--muted)}
+ul{list-style:none;margin:0;padding:0;display:grid}
+li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+li .who{min-width:0;overflow-wrap:anywhere}
+.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap;align-self:center}
+.pill.sim{color:var(--ok);border:1.5px solid var(--ok)}
+.pill.nao{color:var(--no);border:1.5px solid var(--no)}
+.empty{color:var(--muted);margin:0}
+@media (prefers-reduced-motion:no-preference){button{transition:transform .15s}button:active{transform:scale(.98)}}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <canvas id="baloes" aria-hidden="true"></canvas>
+    <h1><span class="n">60</span><span class="da">anos da</span><span class="nome">Luzia</span></h1>
+    <div class="info">
+      <span>19/11</span>
+      <span>21:00</span>
+    </div>
+    <p class="local">Casa Amarela · R. Itacolomi, 381 · Monte Castelo, Contagem – MG</p>
+  </header>
+
+  <form class="card" id="form">
+    <h2>Confirme sua presença!</h2>
+    <div class="choice" role="radiogroup" aria-label="Presença">
+      <input type="radio" name="vai" id="vai-sim" value="sim" checked><label for="vai-sim">Sim, eu vou!</label>
+      <input type="radio" name="vai" id="vai-nao" value="nao"><label for="vai-nao">Não poderei ir</label>
+    </div>
+    <div><label for="nome">Seu nome</label><input id="nome" required maxlength="80" placeholder="Nome e sobrenome"></div>
+    <div><label for="acomp">Acompanhantes</label>
+      <select id="acomp"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+    <div><label for="recado">Recado para a Luzia (opcional)</label><textarea id="recado" rows="2" maxlength="300"></textarea></div>
+    <button id="enviar" type="submit">Confirmar</button>
+    <p class="msg" id="msg" role="status"></p>
+  </form>
+
+</div>
+
+<script>
+// Balões e confete desenhados no topo do convite
+(function(){
+  const c = document.getElementById("baloes"), x = c.getContext("2d");
+  function draw(){
+    const w = c.clientWidth, h = c.clientHeight, r = devicePixelRatio||1;
+    c.width = w*r; c.height = h*r; x.setTransform(r,0,0,r,0,0); x.clearRect(0,0,w,h);
+    const s = Math.min(1, w/520);
+    const balls = [[.08,.06,"#ff8fb8"],[.24,.02,"#ff5f9b"],[.78,.0,"#ffd9c2"],[.93,.08,"#ffc4a3"],[.66,.1,"#ffe6d6"]];
+    for (const [fx,fy,col] of balls){
+      const bx = fx*w, by = fy*h+30*s, rx = 34*s, ry = 42*s;
+      x.strokeStyle="rgba(255,255,255,.5)"; x.lineWidth=1;
+      x.beginPath(); x.moveTo(bx,by+ry); x.quadraticCurveTo(bx+10*s,by+ry+40*s,bx-4*s,by+ry+90*s); x.stroke();
+      const g = x.createRadialGradient(bx-rx*.35,by-ry*.4,2,bx,by,ry*1.1);
+      g.addColorStop(0,"#fff"); g.addColorStop(.25,col); g.addColorStop(1,col);
+      x.globalAlpha=.85; x.fillStyle=g; x.beginPath(); x.ellipse(bx,by,rx,ry,0,0,Math.PI*2); x.fill(); x.globalAlpha=1;
+    }
+    let seed = 7; const rnd = () => (seed = (seed*9301+49297)%233280)/233280;
+    for (let i=0;i<40;i++){
+      x.fillStyle = rnd()>.5 ? "rgba(212,170,110,.9)" : "rgba(255,255,255,.8)";
+      x.save(); x.translate(rnd()*w, rnd()*h*.45); x.rotate(rnd()*3); x.fillRect(-3,-1.2,6,2.4); x.restore();
+    }
+  }
+  draw(); addEventListener("resize", draw);
+})();
+
+// Cole aqui o endereço do App da Web gerado no Google Apps Script (veja LEIA-ME.md)
+const PLANILHA_URL = "https://script.google.com/macros/s/AKfycbxXTwGKqxSMunGp3k_SpMdaPGat8AJI_9u47-q-8-4shAZphHH1HgwShcV6XkG0F6tsyA/exec";
+
+const $ = id => document.getElementById(id);
+
+$("form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const nome = $("nome").value.trim();
+  if (!nome){ $("msg").textContent = "Digite seu nome para confirmar."; return; }
+  const vai = document.querySelector('input[name="vai"]:checked').value;
+  const dados = new URLSearchParams({
+    nome, vai: vai === "sim" ? "Sim" : "Não",
+    acompanhantes: vai === "sim" ? $("acomp").value : "0",
+    recado: $("recado").value.trim()
+  });
+  $("enviar").disabled = true; $("msg").textContent = "Enviando…";
+  try{
+    await fetch(PLANILHA_URL, { method: "POST", mode: "no-cors", body: dados });
+    $("form").reset();
+    $("msg").textContent = vai === "sim" ? "Presença confirmada. Até lá!" : "Resposta registrada. Obrigado por avisar!";
+  }catch(err){
+    $("msg").textContent = "Não deu para enviar. Verifique sua internet e tente de novo.";
+  }finally{ $("enviar").disabled = false; }
+});
+</script>
+</body>
+</html>
